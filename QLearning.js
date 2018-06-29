@@ -81,21 +81,16 @@ function AtualizaEstado(estadoProximo){
 	AtualizaCSS(estadoAtual,estadoProximo);
 }
 
-function AtualizaCSS(estadoAtual,estadoProximo){
-	setInterval(function(){
-		AtualizaCSSAnterior(estadoAtual);
-	}, 1000);
-	setInterval(function(){
-		var Q = "#Q" + estadoProximo;
-		$(Q).css('background','#e60000');
-	}, 1000);
-	
+function AtualizaCSS(estadoAtual,estadoProximo){	
+	AtualizaCSSAnterior(estadoAtual);
+	var Q = "#Q" + estadoProximo;
+	$(Q).css('background','#e60000');
 	
 };
 
 function AtualizaCSSAnterior(estado){
 var Q = "#Q" + estado;
-	if(estado==50){
+	if(estado==50 || estado==1){
 		$(Q).css('background','#00cc00');
 	}
 	else if(estado==7 || estado==10 || estado==11 || estado==14 || estado==19 || estado==20 || estado==21 || 
