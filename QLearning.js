@@ -50,14 +50,64 @@ function AddRecompensa(){
 }
 
 function EscolheAcao(estado){
+
 	var acaoEscolhida = Math.floor(Math.random() * 4);
+	while(QL.qlist[estado-1].acoes[acaoEscolhida]==0)
+		acaoEscolhida = Math.floor(Math.random() * 4);
+
 	ExecutaAcao(acaoEscolhida,estado);
 }
 
 function ExecutaAcao(acaoEscolhida,estado){
-	QL.qlist[estado-1].recompensas[acaoEscolhida] = Math.max()
+	var estadoProximo = QL.transicoesAmbiente[estado-1][acaoEscolhida];
+	QL.qlist[estado-1].recompensas[acaoEscolhida] = QL.recompensaAmbiente[estadoProximo] + QL.gamma * EscolheMaiorQ(estadoProximo);
+	AtualizaEstado(estadoProximo);
 }
 
+function EscolheMaiorQ(estadoProximo){
+	var maiorQ = 0;
+	for(var i=0;i<3;i++)
+	{
+		if(QL.qlist[estadoProximo-1].acoes[i])
+			if(QL.qlist[estadoProximo-1].recompensas[i] > maiorQ)
+				maiorQ = QL.qlist[estadoProximo-1].recompensas[i];
+	}
+	return maiorQ;
+}
+
+function AtualizaEstado(estadoProximo){
+	var estadoAtual = QL.estadoAtual;
+	QL.estadoAtual = estadoProximo;
+	AtualizaCSS(estadoAtual,estadoProximo);
+}
+
+function AtualizaCSS(estadoAtual,estadoProximo){
+	setInterval(function(){
+		AtualizaCSSAnterior(estadoAtual);
+	}, 1000);
+	setInterval(function(){
+		var Q = "#Q" + estadoProximo;
+		$(Q).css('background','#e60000');
+	}, 1000);
+	
+	
+};
+
+function AtualizaCSSAnterior(estado){
+var Q = "#Q" + estado;
+	if(estado==50){
+		$(Q).css('background','#00cc00');
+	}
+	else if(estado==7 || estado==10 || estado==11 || estado==14 || estado==19 || estado==20 || estado==21 || 
+		estado==24 || estado==27 || estado==30 || estado==31 || estado==37 || estado==39 || estado==40 || estado==41)
+	{
+		$(Q).css('background','#262626');
+	}
+	else
+	{
+		$(Q).css('background','#4d4dff');
+	}
+}		
 
 var QL = new Qlearner(0.8);
 var transicoes = new Transicoes()
@@ -120,22 +170,14 @@ Add(48,[1,0,1,1],[47,0,49,43])
 Add(49,[1,0,1,1],[48,0,50,42]);
 Add(50,[1,0,0,1],[49,0,0,41])
 
-
-
-
 AddRecompensa();
-
-
-
-
-
 
 function Inicializar(){
 	QL.estadoAtual = 1;
-	for(var i=0;i<100;i++){
-		EscolheAcao(estadoAtual);
+	while(QL.estadoAtual!=50)
+	{
+		EscolheAcao(QL.estadoAtual);	
 	}
-		
 }
 
 
