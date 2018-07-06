@@ -1,6 +1,8 @@
 
-
-//Math.floor(Math.random() * 4) - Valor Randômico para calcular acoes
+	
+	//Melhorias que devem ser feitas:
+	//-Tabela Q dinamica.
+	//-Ponto de parada.
 
 	function EscolheAcao(estado){
 
@@ -13,11 +15,12 @@
 
 	function ExecutaAcao(acaoEscolhida,estado){
 		var estadoProximo = QL.transicoesAmbiente[estado-1][acaoEscolhida];
-		QL.qlist[estado-1].recompensas[acaoEscolhida] = QL.recompensaAmbiente[estadoProximo] + QL.gamma * EscolheMaiorQ(estadoProximo);
+		QL.qlist[estado-1].recompensas[acaoEscolhida] = QL.recompensaAmbiente[estadoProximo-1] + QL.gamma * EscolheMaiorQ(estadoProximo);
 		AtualizaEstado(estadoProximo);
 	}
 
 	function EscolheMaiorQ(estadoProximo){
+
 		var maiorQ = -5000000000;
 		for(var i=0;i<3;i++)
 		{
@@ -33,6 +36,8 @@
 		QL.estadoAtual = estadoProximo;
 		AtualizaCSS(estadoAtual,estadoProximo);
 	}
+
+	//CSS
 
 	function AtualizaCSS(estadoAtual,estadoProximo){	
 		AtualizaCSSAnterior(estadoAtual);
@@ -58,6 +63,8 @@
 	}		
 
 
+	//Construtores
+
 	function Q(estado,acoes,recompensas){
 		this.estado = estado;
 		this.acoes = acoes
@@ -71,7 +78,6 @@
 		this.gamma = gamma;
 		this.estadoAtual = null;
 	}
-
 
 	function Add (estado,acoes,transicoes){
 		var q = new Q(estado,acoes,[0,0,0,0]);
@@ -96,7 +102,7 @@
 
 		}
 	}
-	
+
 	var QL = new Qlearner(0.8);
 
 
@@ -153,16 +159,50 @@
 	Add(50,[1,0,0,1],[49,0,0,41])
 
 	AddRecompensa();
-
+	//iniciaTabela();
 	function Inicializar(){
 		QL.estadoAtual = 1;
+		var cont = 0;
+		var qntd = parseInt($('#txtQntd').val());
 		var loop = setInterval(function(){
-			EscolheAcao(QL.estadoAtual);
-			if(QL.estadoAtual==50) 
+			if(cont==qntd){
 				clearInterval(loop);
-		},50)
+			}
+			else{
+				EscolheAcao(QL.estadoAtual);
+				if(QL.estadoAtual==50){
+					QL.estadoAtual = 1;
+					cont++;
+				}	
+			}			 
+		},0.0000001)
 				
 	}
 
+	function mostraTabelaQ(){
+		for(var i=0;i<50;i++){
+			for(var j=0;j<4;j++)
+				if(QL.qlist[i].acoes[j]){
+					var cont = i+1;
+					if(j==0)
+						console.log("E"+cont+ " Norte" + "-     " + QL.qlist[i].recompensas[j])
+					else if(j==1)
+						console.log("E"+cont + " Leste" + "-     " + QL.qlist[i].recompensas[j])
+					else if(j==2)
+						console.log("E"+cont+ " Sul" + "-       " + QL.qlist[i].recompensas[j])	
+					else if(j==3)
+						console.log("E"+cont+ " Oeste" + "-     " + QL.qlist[i].recompensas[j])
+				}
+    			
+		}
+	}
 
+	//Eventos
 
+	$("#btnInicia").on('click',function(){
+		Inicializar();
+	})
+
+	$('#mostraTabela').on('click',function(){
+		mostraTabelaQ();
+	})

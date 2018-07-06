@@ -8,6 +8,11 @@
 </head>
 <body>
 	<div class="container">
+		<div class="row col-md-12">
+			<h1><span class="text-center">Inteligência Artificial - Q-Learning.</span></h1>
+		</div>
+	</div>
+	<div class="container">
 		<div class="col-md-9">
 			<div>
 				<h1 id="Q5" class="text-center square blue">5</h1>
@@ -72,23 +77,29 @@
 			</div>
 		</div>
 		<div class="col-md-3">
-			<table class="table table-hover table-striped">
+			<!-- <table id="tabelaQ" class="table table-hover table-striped">
 				<thead>
 					<tr>
 						<th>Q()</th>
 						<th>Recompensa</th>
-						
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>John</td>
-						<td>Doe</td>
-					</tr>
 				</tbody>
-			</table>
+			</table> -->
+		<div class="row">
+			<p>Digite a quantidade de episódios:</p>
+			<button id="btnInicia" type="button" class="btn btn-success">Iniciar</button>	
+			<input id="txtQntd" class="input" type="text"  name="txtQntd">
 		</div>
+			<div class="row">
+				<p>Para ver a tabela Q, pressione F12 e clique no botão abaixo.</p>
+				<button id="mostraTabela" type="button" class="btn btn-primary">Mostrar Tabela</button>	
+			</div>
 	</div>
+</div>
+	
+	
 
 
 	<script src="QLearning.js"></script>
